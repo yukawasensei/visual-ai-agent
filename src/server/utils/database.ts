@@ -1,6 +1,7 @@
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 import type { VideoInfo, VideosDatabase } from '../types/video'
+import type { AnalysisResult } from '../types/analysis'
 
 const DB_FILE = join(process.cwd(), 'videos.json')
 
@@ -47,15 +48,23 @@ export async function getVideoById(id: string): Promise<VideoInfo | undefined> {
   return db.videos.find(video => video.id === id)
 }
 
-// 更新视频状态
+// 更新视频状态和分析结果
 export async function updateVideoStatus(
   id: string,
-  status: VideoInfo['status']
+  status: VideoInfo['status'],
+  analysis?: AnalysisResult,
+  error?: string
 ): Promise<void> {
   const db = await readDB()
   const video = db.videos.find(v => v.id === id)
   if (video) {
     video.status = status
+    if (analysis) {
+      video.analysis = analysis
+    }
+    if (error) {
+      video.error = error
+    }
     db.lastUpdated = new Date().toISOString()
     await writeDB(db)
   }

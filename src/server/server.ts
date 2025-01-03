@@ -4,6 +4,9 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
 import uploadRouter from './routes/upload'
+import videosRouter from './routes/videos'
+import segmentsRouter from './routes/segments'
+import exportRouter from './routes/export'
 
 // 创建 Hono 应用实例
 const app = new Hono()
@@ -22,6 +25,9 @@ app.use('*', cors({
 
 // 注册路由
 app.route('', uploadRouter)
+app.route('', videosRouter)
+app.route('', segmentsRouter)
+app.route('', exportRouter)
 
 // 健康检查路由
 app.get('/api/health', (c) => {

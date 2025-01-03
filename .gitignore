@@ -35,8 +35,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# uploads
+# uploads and exports
 /uploads
+/exports
 *.mp4
 *.mov
 *.avi

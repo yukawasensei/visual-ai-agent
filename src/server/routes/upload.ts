@@ -2,8 +2,9 @@ import { Hono } from 'hono'
 import { join } from 'path'
 import { mkdir, writeFile } from 'fs/promises'
 import { API_CONFIG } from '../config/api'
-import { addVideo, getAllVideos, getVideoById } from '../utils/database'
+import { addVideo, getAllVideos, getVideoById, updateVideoStatus } from '../utils/database'
 import { randomUUID } from 'crypto'
+import { analyzeVideo } from '../services/videoAnalysis'
 
 const app = new Hono()
 
@@ -112,24 +113,42 @@ app.post('/api/upload', async (c) => {
     await writeFile(filepath, Buffer.from(buffer))
 
     // 创建视频记录
+    const videoId = randomUUID()
     const videoInfo = {
-      id: randomUUID(),
+      id: videoId,
       filename,
       originalname: file.name,
       mimetype: file.type,
       size: file.size,
       path: filepath,
       uploadedAt: new Date().toISOString(),
-      status: 'pending' as const
+      status: 'processing' as const
     }
 
     // 保存到数据库
     await addVideo(videoInfo)
 
+    // 启动异步分析
+    analyzeVideo(filepath, {
+      interval: 1,    // 每秒一帧
+      maxFrames: 100  // 最多分析 100 帧
+    })
+      .then(async (analysis) => {
+        // 更新视频状态和分析结果
+        await updateVideoStatus(videoId, 'completed', analysis)
+      })
+      .catch(async (error) => {
+        console.error('视频分析失败:', error)
+        await updateVideoStatus(videoId, 'failed', undefined, error.message)
+      })
+
     // 返回成功响应
     return c.json({
       success: true,
-      data: videoInfo
+      data: {
+        ...videoInfo,
+        message: '视频已上传，正在进行分析'
+      }
     })
 
   } catch (error) {
