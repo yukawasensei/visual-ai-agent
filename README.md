@@ -1,66 +1,95 @@
 # 视频分析工具
 
-这是一个基于 Gemini API 的视频分析工具，可以自动分析视频内容并标记不同类型的片段，用于数字人直播训练。
+基于 Next.js 和 Gemini API 的视频内容分析工具。
 
-## 功能特点
+## 项目结构
 
-- 支持视频文件上传和拖放
-- 自动分析视频内容，识别以下类型的片段：
-  1. 商品讲解：主播正常口播讲解商品（≥3分钟）
-  2. 商品展示：主播手持商品讲解（≥1分钟）
-  3. 素材展示：主播手持商品或展示板（≥30秒）
-- 实时显示分析进度
-- 支持查看和导出分析结果
+```
+├── src/
+│   ├── app/                    # Next.js 应用路由和页面
+│   │   ├── api/               # API 路由处理
+│   │   │   └── analyze/       # 视频分析相关 API
+│   │   ├── layout.tsx         # 根布局组件
+│   │   └── page.tsx           # 首页组件
+│   ├── components/            # React 组件
+│   │   ├── ui/               # 通用 UI 组件
+│   │   └── video/            # 视频相关组件
+│   ├── lib/                   # 工具函数和共享库
+│   │   ├── api/              # API 相关工具
+│   │   └── utils.ts          # 通用工具函数
+│   ├── server/               # 服务器端代码
+│   │   ├── config/          # 服务器配置
+│   │   ├── services/        # 业务服务
+│   │   └── utils/           # 服务器工具函数
+│   └── types/                # TypeScript 类型定义
+├── public/                    # 静态资源
+└── prisma/                   # 数据库模型和迁移（如果需要）
+```
 
 ## 技术栈
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- shadcn/ui
-- Google Gemini API
+- **前端**
+  - Next.js 14
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Shadcn UI
 
-## 开始使用
+- **后端**
+  - Next.js API Routes
+  - Google Gemini API
+  - Prisma (可选，用于数据库操作)
 
-1. 克隆项目：
-   ```bash
-   git clone https://github.com/yourusername/visual-ai-agent.git
-   cd visual-ai-agent
-   ```
+## 开发指南
 
-2. 安装依赖：
-   ```bash
-   npm install
-   ```
+### 环境要求
 
-3. 配置环境变量：
-   - 复制 `.env.local.example` 到 `.env.local`
-   - 在 `.env.local` 中设置你的 Gemini API 密钥：
-     ```
-     NEXT_PUBLIC_GEMINI_API_KEY=your_api_key_here
-     ```
+- Node.js 18+
+- npm 或 yarn
 
-4. 启动开发服务器：
-   ```bash
-   npm run dev
-   ```
+### 安装依赖
 
-5. 在浏览器中访问 `http://localhost:3000`
+```bash
+npm install
+```
 
-## 使用说明
+### 开发模式
 
-1. 打开网页应用
-2. 将视频文件拖放到上传区域，或点击选择文件
-3. 点击"开始分析"按钮
-4. 等待分析完成，查看结果
-5. 可以查看每个片段的详细信息，包括类型、时长和置信度
+```bash
+npm run dev
+```
 
-## 注意事项
+### 构建生产版本
 
-- 支持的视频格式：MP4、MOV、AVI、MKV
-- 建议上传清晰的视频以获得更准确的分析结果
-- 视频分析过程可能需要一些时间，取决于视频长度
+```bash
+npm run build
+npm start
+```
+
+### 环境变量
+
+创建 `.env.local` 文件并添加以下配置：
+
+```env
+GOOGLE_API_KEY=your_gemini_api_key
+```
+
+## API 文档
+
+### 视频分析 API
+
+POST `/api/analyze`
+- 功能：分析上传的视频内容
+- 请求体：视频文件
+- 响应：分析结果
+
+## 贡献指南
+
+1. Fork 项目
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交更改 (`git commit -m 'Add some amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 创建 Pull Request
 
 ## 许可证
 
