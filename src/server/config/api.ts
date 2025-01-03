@@ -11,10 +11,10 @@ export const API_CONFIG = {
 } as const;
 
 export const GEMINI_CONFIG = {
-  MODEL: 'gemini-pro-vision',
+  MODEL: 'gemini-2.0-flash-exp',
   MAX_OUTPUT_TOKENS: 2048,
-  TEMPERATURE: 0.7,
+  TEMPERATURE: 0.4,
   TOP_P: 1,
-  TOP_K: 40,
+  TOP_K: 32,
   MAX_RETRIES: 3,
 } as const; 

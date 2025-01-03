@@ -1,39 +1,52 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import VideoUploader from '@/components/VideoUploader';
+import { VideoTimeline } from '@/components/VideoTimeline';
+
+interface AnalysisResult {
+  segments: Array<{
+    id: string;
+    startTime: number;
+    endTime: number;
+    type: string;
+    tags: string[];
+  }>;
+  duration: number;
+}
 
 export default function Home() {
-  const [count, setCount] = useState(0);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
 
-  const handleClick = () => {
-    setCount(prev => prev + 1);
-    console.log('按钮被点击了！');
+  const handleUploadComplete = (result: AnalysisResult) => {
+    setAnalysisResult(result);
   };
 
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold">视频分析工具</h1>
-          <p className="text-gray-500">
-            上传视频文件，AI 将自动分析并标记视频片段，用于数字人直播训练
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          <Button 
-            onClick={handleClick}
-            variant="default"
-            size="lg"
-            className="w-full md:w-auto"
-          >
-            测试按钮 (点击次数: {count})
-          </Button>
-
-          <p className="text-sm text-gray-500">
-            点击按钮测试交互效果
-          </p>
+    <main className="min-h-screen bg-gray-50">
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-3xl font-bold text-center mb-8">
+          视频内容智能分析
+        </h1>
+        
+        <div className="space-y-8">
+          <VideoUploader onUploadComplete={handleUploadComplete} />
+          
+          {analysisResult && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold">视频分析结果</h2>
+              <VideoTimeline
+                duration={analysisResult.duration}
+                segments={analysisResult.segments}
+                currentTime={currentTime}
+                onTimeChange={setCurrentTime}
+                onSegmentClick={(segment) => {
+                  console.log('Selected segment:', segment);
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </main>

@@ -1,0 +1,41 @@
+{
+  "videos": [
+    {
+      "id": "36dedf79-832c-4376-ae31-37dab60bd068",
+      "filename": "1735887384230-287513830.mp4",
+      "originalname": "lancome output.mp4",
+      "mimetype": "video/mp4",
+      "size": 53772634,
+      "path": "/Users/huangzhipeng/Coding/visual-ai-agent/uploads/1735887384230-287513830.mp4",
+      "uploadedAt": "2025-01-03T06:56:24.280Z",
+      "status": "failed",
+      "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1/models/gemini-pro-vision:generateContent: fetch failed"
+    },
+    {
+      "id": "95b2b4d8-1748-4a60-9be3-4a9783451440",
+      "filename": "1735888050132-666960233.mp4",
+      "originalname": "lancome output.mp4",
+      "mimetype": "video/mp4",
+      "size": 53772634,
+      "path": "/Users/huangzhipeng/Coding/visual-ai-agent/uploads/1735888050132-666960233.mp4",
+      "uploadedAt": "2025-01-03T07:07:30.178Z",
+      "status": "failed",
+      "error": "[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1/models/gemini-pro-vision:generateContent: fetch failed"
+    },
+    {
+      "id": "7b5d7852-8cff-4209-95fd-2e2966347205",
+      "filename": "1735888343397-551147415.mp4",
+      "originalname": "lancome output.mp4",
+      "mimetype": "video/mp4",
+      "size": 53772634,
+      "path": "/Users/huangzhipeng/Coding/visual-ai-agent/uploads/1735888343397-551147415.mp4",
+      "uploadedAt": "2025-01-03T07:12:23.449Z",
+      "status": "completed",
+      "analysis": {
+        "segments": [],
+        "duration": 30
+      }
+    }
+  ],
+  "lastUpdated": "2025-01-03T07:12:23.454Z"
+}
