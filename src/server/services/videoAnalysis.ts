@@ -2,15 +2,14 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/ge
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { GEMINI_CONFIG } from '../config/api'
 
 // 配置 Gemini
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '', {
-  apiEndpoint: 'https://generativelanguage.googleapis.com/v1beta',  // 使用 beta 端点
-});
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '')
 
 // 创建模型实例
 const model = genAI.getGenerativeModel({ 
-  model: 'gemini-2.0-flash-exp',
+  model: GEMINI_CONFIG.MODEL,
   safetySettings: [
     {
       category: HarmCategory.HARM_CATEGORY_HARASSMENT,
@@ -21,7 +20,7 @@ const model = genAI.getGenerativeModel({
       threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
     },
   ],
-});
+})
 
 interface AnalysisResult {
   type: string
@@ -29,10 +28,16 @@ interface AnalysisResult {
   confidence: number
 }
 
+interface VideoSegment {
+  type: string
+  tags: string[]
+  startFrame: number
+}
+
 async function analyzeImage(imagePath: string): Promise<AnalysisResult | null> {
   try {
-    const imageData = readFileSync(imagePath);
-    const imageBase64 = imageData.toString('base64');
+    const imageData = readFileSync(imagePath)
+    const imageBase64 = imageData.toString('base64')
     
     const result = await model.generateContent({
       contents: [{
@@ -61,13 +66,13 @@ async function analyzeImage(imagePath: string): Promise<AnalysisResult | null> {
         topP: GEMINI_CONFIG.TOP_P,
         topK: GEMINI_CONFIG.TOP_K,
       }
-    });
+    })
 
-    const response = await result.response;
-    return JSON.parse(response.text()) as AnalysisResult;
+    const response = await result.response
+    return JSON.parse(response.text()) as AnalysisResult
   } catch (error) {
-    console.error('分析图像失败:', error);
-    return null;
+    console.error('分析图像失败:', error)
+    return null
   }
 }
 
@@ -111,11 +116,7 @@ export async function analyzeVideo(videoPath: string, frameCount: number): Promi
     tags: string[]
   }> = []
 
-  let currentSegment: {
-    type: string
-    tags: string[]
-    startFrame: number
-  } | null = null
+  let currentSegment: VideoSegment | null = null
 
   results.forEach((result, index) => {
     if (!result) return
